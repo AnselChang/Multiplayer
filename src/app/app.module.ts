@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { SvgComponent } from './components/svg/svg.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SvgComponent
   ],
   imports: [
     BrowserModule,
