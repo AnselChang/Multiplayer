@@ -12,4 +12,8 @@ to handle zooming and panning the playfield.
 })
 export class SvgComponent {
 
+  public readonly GAME_WIDTH = 1000;
+  public readonly GAME_HEIGHT = 1000;
+  
+
 }
