@@ -1,20 +1,27 @@
 <svg:g>
     <!-- Horizontal lines -->
-    <line *ngFor="let y of [].constructor(Math.ceil(height/granularity)); let i = index"
-          [attr.x1]="0"
-          [attr.y1]="i * granularity"
-          [attr.x2]="width"
-          [attr.y2]="i * granularity"
-          stroke="lightgray"
-          stroke-width="1"/>
+    <ng-container *ngIf="granularity > 0 && granularity < height">
+      <line *ngFor="let y of [].constructor(Math.floor(height/granularity) - 1); let i = index"
+            [attr.x1]="0"
+            [attr.y1]="(i + 1) * granularity"
+            [attr.x2]="width"
+            [attr.y2]="(i + 1) * granularity"
+            stroke="lightgray"
+            stroke-width="1"/>
+    </ng-container>
   
     <!-- Vertical lines -->
-    <line *ngFor="let x of [].constructor(Math.ceil(width/granularity)); let i = index"
-          [attr.x1]="i * granularity"
-          [attr.y1]="0"
-          [attr.x2]="i * granularity"
-          [attr.y2]="height"
-          stroke="lightgray"
-          stroke-width="1"/>
+    <ng-container *ngIf="granularity > 0 && granularity < width">
+      <line *ngFor="let x of [].constructor(Math.floor(width/granularity) - 1); let i = index"
+            [attr.x1]="(i + 1) * granularity"
+            [attr.y1]="0"
+            [attr.x2]="(i + 1) * granularity"
+            [attr.y2]="height"
+            stroke="lightgray"
+            stroke-width="1"/>
+    </ng-container>
+  
+    <!-- Surrounding rectangle -->
+    <rect x="0" y="0" [attr.width]="width" [attr.height]="height" stroke="black" fill="none"/>
   </svg:g>
   
