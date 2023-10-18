@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
 import { FormsModule } from '@angular/forms';
+import { SocketService } from './services/socket.service';
+import { GameStateService } from './services/game-state.service';
 
 @Component({
   selector: 'app-root',
@@ -10,34 +12,22 @@ import { FormsModule } from '@angular/forms';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'multiplayer';
 
-  private socket!: Socket;
-  public inputValue: string = "";
+  constructor(private gameService: GameStateService, private socketService: SocketService) {}
 
-  ngOnInit(): void {
-
-    this.socket = io();  // Connect to the server
-
-    this.socket.on('connect', () => {
-      console.log('Connected to the server');
-    });
-
-    this.socket.on('message', (msg: string) => {
-      console.log('message received: ' + msg);
-    });
-      
+  public isConnectedToServer(): boolean {
+    return this.gameService.isConnected();
   }
 
-  send(): void {
-    console.log("Sending", this.inputValue);
-    this.socket.emit('message', this.inputValue);
-    this.inputValue = "";
+  public connectToServer(playerName: string): void {
+    this.socketService.connectToServer(playerName);
+  }
+
+  ngOnInit(): void {
+    this.socketService.initSocket();
   }
 
   ngOnDestroy(): void {
-    if (this.socket) {
-      this.socket.disconnect();
-      console.log('Disconnected from the server');
-    }
+    this.socketService.destroySocket();
   }
 
 }
