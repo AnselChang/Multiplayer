@@ -3,6 +3,7 @@ import { Socket, io } from 'socket.io-client';
 import { FormsModule } from '@angular/forms';
 import { SocketService } from './services/socket.service';
 import { GameStateService } from './services/game-state.service';
+import { Game } from './models/game';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public isConnectedToServer(): boolean {
     return this.gameStateService.isConnected();
+  }
+
+  public getGame(): Game {
+    return this.gameStateService.getGame();
   }
 
   ngOnDestroy(): void {

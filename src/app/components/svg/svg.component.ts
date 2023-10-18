@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Game } from 'src/app/models/game';
+import { Player } from 'src/app/models/player';
 
 /*
 Handles the entire playable area as an SVG element. Uses svg-pan-zoom library
@@ -11,9 +13,22 @@ to handle zooming and panning the playfield.
   styleUrls: ['./svg.component.scss']
 })
 export class SvgComponent {
+  @Input() game!: Game;
 
-  public readonly GAME_WIDTH = 1000;
-  public readonly GAME_HEIGHT = 1000;
+
+  constructor() { }
+
+  public getGameWidth(): number {
+    return this.game.getGameWidth();
+  }
+
+  public getGameHeight(): number {
+    return this.game.getGameHeight();
+  }
+
+  public getPlayers(): Player[] {
+    return this.game.getPlayers();
+  }
   
 
 }

@@ -2,5 +2,5 @@
 // state that is ONLY RELEVANT to that client
 
 export class TailoredGameState {
-    constructor(public myId: number) {}
+    constructor(public myId: string) {}
 }

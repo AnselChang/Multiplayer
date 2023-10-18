@@ -24,7 +24,7 @@ export class SocketService {
     });
 
     this.socket.on('disconnect', () => {
-      this.socket.emit('leavegame', this.gameStateService.getGame().getMyID());
+      this.socket.emit('leavegame', this.gameStateService.getGame().getMe().name);
     });
 
   }

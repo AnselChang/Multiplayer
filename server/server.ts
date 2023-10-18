@@ -18,20 +18,27 @@ app.use(express.static(path.join(__dirname, '/../dist/multiplayer')));
 app.use(morgan('dev')); // 'dev' is one of the predefined formats provided by Morgan
 
 const game = new ServerGame();
+const clients = new Map<string, Socket>(); // a map of all connected clients
 
 io.on('connection', (socket: Socket) => {
-    console.log('a user connected');
+    console.log('A user connected with ID: ' + socket.id);
+    clients.set(socket.id, socket);
 
     socket.on('joingame', (playerName: string) => {
-        console.log('Player connected with name: ' + playerName);
-        game.addPlayer(playerName);
+        console.log('Player joined game with name: ' + playerName);
+        game.addPlayer(socket.id, playerName);
 
       });
 
-    socket.on('leavegame', (playerID: number) => {
-        console.log('Player leaving server with ID: ' + playerID);
-        game.removePlayer(playerID);
+    socket.on('leavegame', (playerName: string) => {
+        console.log('Player left game with name: ' + playerName);
+        game.removePlayer(socket.id);
     });
+
+    socket.on('disconnect', () => {
+      console.log('A user disconnected with ID: ' + socket.id);
+      clients.delete(socket.id);
+  });
 
 });
 
@@ -40,11 +47,16 @@ setInterval(() => {
     const generalGameState = game.generateGeneralGameState();
     
     // send game state to all connected players
-    game.getPlayerIDs().forEach((id) => {
-        const tailoredGameState = game.generateTailoredGameState(id);
+    game.getPlayerIDs().forEach((clientID) => {
+        const tailoredGameState = game.generateTailoredGameState(clientID);
         const gameState = new GameState(generalGameState, tailoredGameState);
-        console.log('sending game state to player with ID: ' + id, gameState);
-        io.emit('game', gameState);
+
+        // find the socket with the given id and send the game state to it (if it exists)
+        const clientSocket = clients.get(clientID);
+        if (clientSocket) {
+            clientSocket.emit('game', gameState);
+        }
+
     });
 
 }, 1000); // 1 times per second

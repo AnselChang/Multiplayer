@@ -2,7 +2,7 @@
 
 export class PlayerState {
     constructor(
-        public id: number,
+        public id: string,
         public name: string,
         public x: number,
         public y: number

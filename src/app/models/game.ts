@@ -3,20 +3,42 @@ import { Player } from "./player";
 
 // The model for the entire game
 export class Game {
-    private players: Map<number, Player> = new Map<number, Player>();
-    private myID: number;
+
+    private players: Map<string, Player> = new Map<string, Player>();
+    private myID: string;
+
+    private GAME_WIDTH: number = -1;
+    private GAME_HEIGHT: number = -1;
     
     constructor() {
-        this.myID = -1;
+        this.myID = "";
     }
 
-    public getMyID(): number {
+    public getMyID(): string {
         return this.myID;
+    }
+
+    public getMe(): Player {
+        return this.players.get(this.myID)!;
+    }
+
+    public getGameWidth(): number {
+        return this.GAME_WIDTH;
+    }
+
+    public getGameHeight(): number {
+        return this.GAME_HEIGHT;
+    }
+
+    public getPlayers(): Player[] {
+        return Array.from(this.players.values());
     }
 
     public syncWithServer(state: GameState) {
 
         this.myID = state.myself.myId;
+        this.GAME_WIDTH = state.game.GAME_WIDTH;
+        this.GAME_HEIGHT = state.game.GAME_HEIGHT;
 
         // Update the players based on the server state
         this.players.clear();

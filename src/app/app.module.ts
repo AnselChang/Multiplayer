@@ -6,13 +6,15 @@ import { FormsModule } from '@angular/forms';
 import { SvgComponent } from './components/svg/svg.component';
 import { GridLinesComponent } from './components/grid-lines/grid-lines.component';
 import { ConnectToServerComponent } from './components/connect-to-server/connect-to-server.component';
+import { SvgPlayerComponent } from './components/game-components/svg-player/svg-player.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SvgComponent,
     GridLinesComponent,
-    ConnectToServerComponent
+    ConnectToServerComponent,
+    SvgPlayerComponent
   ],
   imports: [
     BrowserModule,

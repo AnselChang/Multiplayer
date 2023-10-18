@@ -1,7 +1,7 @@
 export class Player {
 
     constructor(
-        public id: number,
+        public id: string,
         public isMe: boolean,
         public name: string,
         public x: number,
