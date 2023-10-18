@@ -12,18 +12,14 @@ import { GameStateService } from './services/game-state.service';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'multiplayer';
 
-  constructor(private gameService: GameStateService, private socketService: SocketService) {}
-
-  public isConnectedToServer(): boolean {
-    return this.gameService.isConnected();
-  }
-
-  public connectToServer(playerName: string): void {
-    this.socketService.connectToServer(playerName);
-  }
+  constructor(private gameStateService: GameStateService, private socketService: SocketService) {}
 
   ngOnInit(): void {
     this.socketService.initSocket();
+  }
+
+  public isConnectedToServer(): boolean {
+    return this.gameStateService.isConnected();
   }
 
   ngOnDestroy(): void {

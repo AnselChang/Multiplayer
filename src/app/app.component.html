@@ -1,7 +1,9 @@
-<!-- example.component.html -->
+<!-- Display the SVG if the user is connected to the server, otherwise display the connect to server component. -->
 
-<app-svg></app-svg>
-<!-- 
-<input [(ngModel)]="inputValue">
-<p>You entered: {{ inputValue }}</p>
-<button (click)="send()">Send</button> -->
+<ng-container *ngIf="!isConnectedToServer()">
+    <app-connect-to-server />
+  </ng-container>
+
+<ng-container *ngIf="isConnectedToServer()">
+  <app-svg />
+</ng-container>

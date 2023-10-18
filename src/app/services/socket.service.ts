@@ -22,6 +22,11 @@ export class SocketService {
       console.log('message received: ' + gameState);
       this.gameStateService.syncGameStateFromServer(gameState);
     });
+
+    this.socket.on('disconnect', () => {
+      this.socket.emit('leave', this.gameStateService.getGame().getMyID());
+    });
+
   }
 
   // called to join the server with player name
