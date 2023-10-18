@@ -14,5 +14,5 @@ export class GeneralGameState {
     constructor(
         public GAME_WIDTH: number,
         public GAME_HEIGHT: number,
-        public players: Map<number, PlayerState>) {}
+        public players: PlayerState[]) {}
 }

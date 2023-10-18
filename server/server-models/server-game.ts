@@ -1,6 +1,6 @@
-import { GeneralGameState, PlayerState } from "shared/server-to-client/general-game-state";
+import { GeneralGameState, PlayerState } from "../../shared/server-to-client/general-game-state";
 import { ServerPlayer } from "./server-player";
-import { TailoredGameState } from "shared/server-to-client/tailored-game-state";
+import { TailoredGameState } from "../../shared/server-to-client/tailored-game-state";
 
 // The model for the entire game
 export class ServerGame {
@@ -34,7 +34,9 @@ export class ServerGame {
         this.players.forEach((player, id) => {
             playerStates.set(id, new PlayerState(id, player.name, player.x, player.y));
         });
-        return new GeneralGameState(this.GAME_WIDTH, this.GAME_HEIGHT, playerStates);
+
+        const playersArray = Array.from(playerStates.values());
+        return new GeneralGameState(this.GAME_WIDTH, this.GAME_HEIGHT, playersArray);
     }
 
     public generateTailoredGameState(id: number): TailoredGameState {

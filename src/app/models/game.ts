@@ -20,8 +20,8 @@ export class Game {
 
         // Update the players based on the server state
         this.players.clear();
-        state.game.players.forEach((playerState, id) => {
-            this.players.set(id, new Player(
+        state.game.players.forEach((playerState) => {
+            this.players.set(playerState.id, new Player(
                 playerState.id,
                 playerState.id === this.myID,
                 playerState.name,
