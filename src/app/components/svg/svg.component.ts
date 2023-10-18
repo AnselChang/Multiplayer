@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { Game } from 'src/app/models/game';
 import { Player } from 'src/app/models/player';
+import { throttle } from 'scripts/throttle';
 
 /*
 Handles the entire playable area as an SVG element. Uses svg-pan-zoom library
@@ -12,7 +13,7 @@ to handle zooming and panning the playfield.
   templateUrl: './svg.component.html',
   styleUrls: ['./svg.component.scss']
 })
-export class SvgComponent implements AfterViewInit {
+export class SvgComponent implements AfterViewInit, OnInit {
   @Input() game!: Game;
   @Input() myself!: Player;
 
@@ -20,6 +21,10 @@ export class SvgComponent implements AfterViewInit {
   private WINDOW_HEIGHT!: number;
 
   constructor(private elRef: ElementRef) { }
+
+  ngOnInit(): void {
+    window.onresize = throttle(this.updateWindowDimensions, 200);
+  }
 
   ngAfterViewInit() {
     this.updateWindowDimensions();
@@ -38,10 +43,6 @@ export class SvgComponent implements AfterViewInit {
     return this.game.getPlayers();
   }
 
-  @HostListener('window:resize', ['$event'])
-    onResize(event: any) {
-        this.updateWindowDimensions();
-    }
 
   updateWindowDimensions() {
     this.WINDOW_WIDTH = this.elRef.nativeElement.clientWidth;
