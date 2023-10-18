@@ -5,5 +5,5 @@
   </ng-container>
 
 <ng-container *ngIf="isConnectedToServer()">
-  <app-svg [game]="getGame()"/>
+  <app-svg [game]="getGame()" [myself]="getMyself()"/>
 </ng-container>
