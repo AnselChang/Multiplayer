@@ -19,7 +19,6 @@ export class SocketService {
     this.socket = io();  // Connect to the server
 
     this.socket.on('game', (gameState: GameState) => {
-      console.log('message received: ', gameState);
       this.gameStateService.syncGameStateFromServer(gameState);
     });
 

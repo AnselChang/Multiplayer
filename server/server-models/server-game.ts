@@ -45,4 +45,40 @@ export class ServerGame {
         return Array.from(this.players.keys());
     }
 
+    public getPlayerByID(id: string): ServerPlayer {
+        return this.players.get(id)!;
+    }
+
+    // called every tick. update the game state
+    public update() {
+
+        // For every player, move them according to their input direction
+        this.players.forEach((player) => {
+
+            // game logic: max movement speed is 5. if less than 1, set to 0
+            let speed = player.input.magnitude;
+            if (speed < 1) {
+                speed = 0;
+            } else if (speed > 5) {
+                speed = 5;
+            }
+
+            player.x += speed * Math.cos(player.input.direction);
+            player.y += speed * Math.sin(player.input.direction);
+
+            // bound the player to the map
+            player.x = Math.max(0, Math.min(this.GAME_WIDTH, player.x));
+            player.y = Math.max(0, Math.min(this.GAME_HEIGHT, player.y));
+            
+
+        });
+
+
+        // reset event-based inputs for all players
+        this.players.forEach((player) => {
+            player.input.resetEventBasedInputs();
+        });
+
+    }
+
 }

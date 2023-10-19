@@ -1,0 +1,13 @@
+<svg:g>
+
+    <defs>
+        <radialGradient id="fadeCircle" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" style="stop-color: black; stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: black; stop-opacity: 0" />
+        </radialGradient>
+    </defs>
+
+    <!-- Draw the circle using the gradient -->
+    <svg:circle [attr.cx]="getX()" [attr.cy]="getY()" [attr.r]="getRadius()" fill="url(#fadeCircle)" />
+
+</svg:g>

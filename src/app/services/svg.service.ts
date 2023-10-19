@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameStateService } from './game-state.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,24 @@ export class SvgService {
   private mouseX: number = 0;
   private mouseY: number = 0;
 
-  constructor(private gameStateService: GameStateService) { }
+  private renderedWidth: number = 0;
+  private renderedHeight: number = 0;
+
+  // when svg viewbo changes, notify subscribers
+  public onUpdate$ = new Subject<void>();
+
+
+
+  constructor(private gameStateService: GameStateService) {
+    this.gameStateService.onUpdate$.subscribe(() => {
+      this.onUpdate$.next();
+    });
+  }
 
   public initSVGElement(svg: SVGSVGElement): void {
     this.svg = svg;
+    this.onUpdate$.next();
+    console.log("SVG element initialized", svg, typeof svg);
   }
 
 
@@ -29,6 +44,20 @@ export class SvgService {
     return { x: svgPoint.x, y: svgPoint.y };
   }
 
+  updateRenderedDimensions(renderedWidth: number, renderedHeight: number): void {
+    this.renderedWidth = renderedWidth;
+    this.renderedHeight = renderedHeight;
+    console.log('renderedWidth, renderedHeight', renderedWidth, renderedHeight);
+  }
+
+  public scalarToSVG(scalarInPixels: number): number {
+    return scalarInPixels * this.renderedWidth / this.VIEW_RADIUS;
+  }
+
+  public scalarToPixels(scalarInSVG: number): number {
+    return scalarInSVG * this.VIEW_RADIUS / this.renderedWidth;
+  }
+
   public updateMousePosition(rawMouseX: number, rawMouseY: number): void {
     const newMousePos = this.screenToSVGCoodinates(rawMouseX, rawMouseY);
     this.mouseX = newMousePos.x;
@@ -39,6 +68,7 @@ export class SvgService {
   public getMousePosition(): { x: number, y: number } {
     return { x: this.mouseX, y: this.mouseY };
   }
+
 
   public getViewBox(): string {
 

@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import { ServerGame } from "./server-models/server-game";
 import { GameState } from "../shared/server-to-client/game-state";
+import { DirectionalPlayerInputMessage, Message, MessageType } from "../shared/client-to-server/message";
 
 const express = require('express');
 const { Server } = require('socket.io');
@@ -20,9 +21,22 @@ app.use(morgan('dev')); // 'dev' is one of the predefined formats provided by Mo
 const game = new ServerGame();
 const clients = new Map<string, Socket>(); // a map of all connected clients
 
+const FPS = 60;
+
 io.on('connection', (socket: Socket) => {
     console.log('A user connected with ID: ' + socket.id);
     clients.set(socket.id, socket);
+
+    socket.on('message', (message: Message) => {
+      const player = game.getPlayerByID(socket.id);
+
+      if (message.type === MessageType.DIRECTIONAL_PLAYER_INPUT) {
+        const dMessage = message as DirectionalPlayerInputMessage;
+        player.input.direction = dMessage.direction;
+        player.input.magnitude = dMessage.magnitude;
+      }
+
+    });
 
     socket.on('joingame', (playerName: string) => {
         console.log('Player joined game with name: ' + playerName);
@@ -37,12 +51,16 @@ io.on('connection', (socket: Socket) => {
 
     socket.on('disconnect', () => {
       console.log('A user disconnected with ID: ' + socket.id);
+      game.removePlayer(socket.id);
       clients.delete(socket.id);
   });
 
 });
 
 setInterval(() => {
+
+    // update the game state
+    game.update();
 
     const generalGameState = game.generateGeneralGameState();
     
@@ -59,7 +77,7 @@ setInterval(() => {
 
     });
 
-}, 1000); // 1 times per second
+}, 1000 / FPS);
 
 // Connect to server
 server.listen(port, () => console.log(`App running on: http://localhost:${port}`));

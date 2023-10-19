@@ -1,4 +1,5 @@
 <svg #rootSVG [attr.viewBox]="getViewBox()">
     <g app-grid-lines [minX]="-1000" [minY]="-1000" [maxX]="1000" [maxY]="1000" [step]="20" />
     <g app-svg-player *ngFor="let player of getPlayers()" [player]="player" />
+    <g app-mouse-indicator />
 </svg>

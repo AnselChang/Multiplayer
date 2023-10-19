@@ -1,5 +1,6 @@
 import { GameState } from "shared/server-to-client/game-state";
 import { Player } from "./player";
+import { Subject } from "rxjs";
 
 // The model for the entire game
 export class Game {
@@ -9,6 +10,8 @@ export class Game {
 
     private GAME_WIDTH: number = -1;
     private GAME_HEIGHT: number = -1;
+
+    public onMyselfPositionUpdate$ = new Subject<void>();
     
     constructor() {
         this.myID = "";
@@ -50,6 +53,11 @@ export class Game {
                 playerState.x,
                 playerState.y,
             ));
+        });
+
+        // if myself player position is updated, notify onMyselfPositionUpdate$
+        this.getMe().onPositionUpdate$.subscribe(() => {
+            this.onMyselfPositionUpdate$.next();
         });
     }
     
