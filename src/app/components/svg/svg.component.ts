@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Game } from 'src/app/models/game';
 import { Player } from 'src/app/models/player';
 import { throttle } from 'scripts/throttle';
+import { SvgService } from 'src/app/services/svg.service';
 
 /*
 Handles the entire playable area as an SVG element. Uses svg-pan-zoom library
@@ -13,14 +14,16 @@ to handle zooming and panning the playfield.
   templateUrl: './svg.component.html',
   styleUrls: ['./svg.component.scss']
 })
-export class SvgComponent {
+export class SvgComponent implements AfterViewInit {
   @Input() game!: Game;
   @Input() myself!: Player;
+  @ViewChild('rootSVG') svg!: ElementRef<SVGSVGElement>;
 
-  private WINDOW_WIDTH!: number;
-  private WINDOW_HEIGHT!: number;
+  constructor(private elRef: ElementRef, private svgService: SvgService) { }
 
-  constructor(private elRef: ElementRef) { }
+  ngAfterViewInit(): void {
+    this.svgService.initSVGElement(this.svg.nativeElement);
+  }
 
   public getGameWidth(): number {
     return this.game.getGameWidth();
@@ -34,21 +37,14 @@ export class SvgComponent {
     return this.game.getPlayers();
   }
 
-
   public getViewBox(): string {
-
-    const centerX = this.myself.x;
-    const centerY = this.myself.y;
-    const radius = 100;
-
-    const minX = centerX - radius;
-    const minY = centerY - radius;
-    const width = radius * 2;
-    const height = radius * 2;
-    const str = `${minX} ${minY} ${width} ${height}`
-    return str;
-
+    return this.svgService.getViewBox();
   };
+
+  @HostListener('document:mousemove', ['$event']) 
+  onMouseMove(e: MouseEvent) {
+    this.svgService.updateMousePosition(e.clientX, e.clientY);
+  }
   
 
 }
