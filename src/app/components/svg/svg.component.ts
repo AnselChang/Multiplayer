@@ -13,7 +13,7 @@ to handle zooming and panning the playfield.
   templateUrl: './svg.component.html',
   styleUrls: ['./svg.component.scss']
 })
-export class SvgComponent implements AfterViewInit, OnInit {
+export class SvgComponent {
   @Input() game!: Game;
   @Input() myself!: Player;
 
@@ -21,15 +21,6 @@ export class SvgComponent implements AfterViewInit, OnInit {
   private WINDOW_HEIGHT!: number;
 
   constructor(private elRef: ElementRef) { }
-
-  ngOnInit(): void {
-    window.onresize = throttle(this.updateWindowDimensions, 200);
-  }
-
-  ngAfterViewInit() {
-    this.updateWindowDimensions();
-  }
-
 
   public getGameWidth(): number {
     return this.game.getGameWidth();
@@ -44,20 +35,18 @@ export class SvgComponent implements AfterViewInit, OnInit {
   }
 
 
-  updateWindowDimensions() {
-    this.WINDOW_WIDTH = this.elRef.nativeElement.clientWidth;
-    this.WINDOW_HEIGHT = this.elRef.nativeElement.clientHeight;
-    console.log(`Window dimensions: ${this.WINDOW_WIDTH} x ${this.WINDOW_HEIGHT}`);
-    
-}
+  public getViewBox(): string {
 
-  public getTransform(): string {
+    const centerX = this.myself.x;
+    const centerY = this.myself.y;
+    const radius = 100;
 
-    const offsetX = (this.WINDOW_WIDTH / 2) - this.myself.x;
-    const offsetY = (this.WINDOW_HEIGHT / 2) - this.myself.y;
-    const zoomLevel = 1;
-
-    return `translate(${0}, ${0}) scale(${zoomLevel})`;
+    const minX = centerX - radius;
+    const minY = centerY - radius;
+    const width = radius * 2;
+    const height = radius * 2;
+    const str = `${minX} ${minY} ${width} ${height}`
+    return str;
 
   };
   

@@ -1,27 +1,24 @@
 <svg:g>
     <!-- Horizontal lines -->
-    <ng-container *ngIf="granularity > 0 && granularity < height">
-      <line *ngFor="let y of [].constructor(Math.floor(height/granularity) - 1); let i = index"
-            [attr.x1]="0"
-            [attr.y1]="(i + 1) * granularity"
-            [attr.x2]="width"
-            [attr.y2]="(i + 1) * granularity"
+    <ng-container>
+      <line *ngFor="let y of [].constructor(Math.floor((maxY-minY)/step) + 1); let i = index"
+            [attr.x1]="minX"
+            [attr.y1]="minX + i * step"
+            [attr.x2]="maxX"
+            [attr.y2]="minX + i * step"
             stroke="lightgray"
             stroke-width="1"/>
     </ng-container>
   
     <!-- Vertical lines -->
-    <ng-container *ngIf="granularity > 0 && granularity < width">
-      <line *ngFor="let x of [].constructor(Math.floor(width/granularity) - 1); let i = index"
-            [attr.x1]="(i + 1) * granularity"
-            [attr.y1]="0"
-            [attr.x2]="(i + 1) * granularity"
-            [attr.y2]="height"
+    <ng-container>
+      <line *ngFor="let x of [].constructor(Math.floor((maxX-minX)/step) + 1); let i = index"
+            [attr.x1]="minY + i * step"
+            [attr.y1]="minY"
+            [attr.x2]="minY + i * step"
+            [attr.y2]="maxY"
             stroke="lightgray"
             stroke-width="1"/>
     </ng-container>
-  
-    <!-- Surrounding rectangle -->
-    <rect x="0" y="0" [attr.width]="width" [attr.height]="height" stroke="black" fill="none"/>
-  </svg:g>
+    </svg:g>
   

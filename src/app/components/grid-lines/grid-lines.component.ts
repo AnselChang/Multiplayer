@@ -6,9 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./grid-lines.component.scss']
 })
 export class GridLinesComponent implements OnInit {
-  @Input() width = 500;       // default width of the SVG
-  @Input() height = 500;      // default height of the SVG
-  @Input() granularity = 30;  // distance between grid lines
+  @Input() minX!: number;
+  @Input() maxX!: number;
+  @Input() minY!: number;
+  @Input() maxY!: number;
+  @Input() step!: number;
 
   Math = Math; // make Math available to the template
 
