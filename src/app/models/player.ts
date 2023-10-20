@@ -11,8 +11,11 @@ export class Player {
         public id: string,
         public isMe: boolean,
         public name: string,
+        public fillColor: string,
+        public strokeColor: string,
         x: number,
         y: number,
+        public size: number,
     ) {
         this._x = x;
         this._y = y;

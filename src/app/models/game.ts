@@ -50,8 +50,11 @@ export class Game {
                 playerState.id,
                 playerState.id === this.myID,
                 playerState.name,
+                playerState.fillColor,
+                playerState.strokeColor,
                 playerState.x,
                 playerState.y,
+                playerState.size,
             ));
         });
 

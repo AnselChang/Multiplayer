@@ -24,11 +24,7 @@ export class SvgPlayerComponent {
   }
 
   public getRadius(): number {
-    return 10;
-  }
-
-  public getColor(): string {
-    return "lightblue";
+    return this.player.size;
   }
   
   public getStrokeWidth(): number {

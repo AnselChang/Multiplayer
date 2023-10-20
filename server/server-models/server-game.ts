@@ -1,6 +1,7 @@
 import { GeneralGameState, PlayerState } from "../../shared/server-to-client/general-game-state";
 import { ServerPlayer } from "./server-player";
 import { TailoredGameState } from "../../shared/server-to-client/tailored-game-state";
+import { generateRandomPlayerColors } from "../colors";
 
 // The model for the entire game
 export class ServerGame {
@@ -20,7 +21,9 @@ export class ServerGame {
         let x = Math.random() * this.GAME_WIDTH * this.SPAWN_COVERAGE + this.GAME_WIDTH * (1 - this.SPAWN_COVERAGE) / 2;
         let y = Math.random() * this.GAME_HEIGHT * this.SPAWN_COVERAGE + this.GAME_HEIGHT * (1 - this.SPAWN_COVERAGE) / 2;
 
-        this.players.set(id, new ServerPlayer(id, playerName, x, y));
+        const [fillColor, strokeColor] = generateRandomPlayerColors();
+
+        this.players.set(id, new ServerPlayer(id, playerName, fillColor, strokeColor, x, y));
     }
 
     public removePlayer(id: string) {
@@ -30,7 +33,7 @@ export class ServerGame {
     public generateGeneralGameState(): GeneralGameState {
         let playerStates: Map<string, PlayerState> = new Map<string, PlayerState>();
         this.players.forEach((player, id) => {
-            playerStates.set(id, new PlayerState(id, player.name, player.x, player.y));
+            playerStates.set(id, new PlayerState(id, player.name, player.fillColor, player.strokeColor, player.x, player.y, player.size));
         });
 
         const playersArray = Array.from(playerStates.values());
